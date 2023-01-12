@@ -3,6 +3,7 @@ import sys
 import time
 
 from classes.clickable import Clickable
+from classes.flash import Flash
 from classes.level_manager import LevelManager
 from classes.text import FadingText, StaticText
 
@@ -17,7 +18,7 @@ class Game:
         self.screen = pygame.display.set_mode(self.size)
         self.last_time = 0
         self.delta = 0
-        self.level_manager = LevelManager()
+        self.level_manager = LevelManager(self.size)
 
     def update(self):
         while True:
@@ -54,10 +55,16 @@ class Game:
                     self.screen.blit(obj.image, obj.rect)
 
                 elif isinstance(obj, FadingText):
-                    self.screen.blit(obj.msg, obj.msg.get_rect(center=self.screen.get_rect().center))
+                    if obj.x is not None and obj.y is not None:
+                        self.screen.blit(obj.msg, obj.msg.get_rect(center=(self.screen.get_rect().center[0], obj.y)))
+                    else:
+                        self.screen.blit(obj.msg, obj.msg.get_rect(center=self.screen.get_rect().center))
 
                 elif isinstance(obj, StaticText):
                     self.screen.blit(obj.msg, obj.msg.get_rect(center=(obj.x + 150, obj.y + 50)))
+
+                elif isinstance(obj, Flash):
+                    self.screen.blit(obj.surface, (0, 0))
 
             pygame.display.flip()
 

@@ -10,8 +10,6 @@ class Button(Clickable):
         super().__init__(img_path, x, y)
 
         self.grow = True
-        self.w0 = self.rect.w
-        self.h0 = self.rect.h
         self.action = action
 
         Button.buttons.append(self)
